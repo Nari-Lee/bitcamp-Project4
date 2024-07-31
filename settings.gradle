@@ -13,4 +13,4 @@ plugins {
 rootProject.name = 'bitcamp-project4'
 include('app-client')
 //include('app-server')
-//include('app-common')
+include('app-common')

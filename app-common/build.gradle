@@ -7,7 +7,7 @@
 
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
-    id 'application'
+    id 'java-library'
 }
 
 repositories {
@@ -16,10 +16,7 @@ repositories {
 }
 
 dependencies {
-    implementation project(':app-common')
-
     implementation 'org.apache.poi:poi-ooxml:5.3.0'
-
     // Use JUnit Jupiter for testing.
     testImplementation libs.junit.jupiter
 
@@ -36,15 +33,11 @@ java {
     }
 }
 
-application {
-    // Define the main class for the application.
-    mainClass = 'bitcamp.myapp.ClientApp'
-}
-
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }
-run {
-    standardInput = System.in // 기본 값은 empty stream 이다.
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
 }

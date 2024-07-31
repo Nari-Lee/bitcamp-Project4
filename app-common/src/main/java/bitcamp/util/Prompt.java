@@ -30,4 +30,12 @@ public class Prompt {
   public static void close() {
     keyboardScanner.close();
   }
+
+  public static void printHistory() {
+    System.out.println("[명령 내역]----------------");
+    for (String log : inputQueue) {
+      System.out.println(log);
+    }
+    System.out.println("------------------------ 끝");
+  }
 }
