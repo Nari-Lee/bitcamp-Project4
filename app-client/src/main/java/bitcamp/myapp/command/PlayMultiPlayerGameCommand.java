@@ -29,17 +29,16 @@ public class PlayMultiPlayerGameCommand implements Command {
       while (true) {
         String message = in.readUTF();
         System.out.println(message);
-        if (message.startsWith("현재 숫자: ")) {
-          int currentNumber = Integer.parseInt(message.split(": ")[1].trim());
-          if (currentNumber >= 31) {
-            break;
-          }
+        if (message.contains("현재 숫자: ")) {
           int count = Prompt.inputInt("몇 개의 숫자를 말하시겠습니까? (1-3)>");
           while (count < 1 || count > 3) {
             count = Prompt.inputInt("잘못된 입력입니다. 다시 입력해주세요 (1-3)>");
           }
           out.writeUTF(String.valueOf(count));
           out.flush();
+        }
+        if (message.contains("졌습니다") || message.contains("이겼습니다")) {
+          break;
         }
       }
     } catch (Exception e) {

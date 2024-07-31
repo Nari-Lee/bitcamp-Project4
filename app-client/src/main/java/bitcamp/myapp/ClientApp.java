@@ -3,6 +3,8 @@ package bitcamp.myapp;
 import bitcamp.context.ApplicationContext;
 import bitcamp.listener.ApplicationListener;
 import bitcamp.menu.MenuGroup;
+import bitcamp.myapp.command.PlayMultiPlayerGameCommand;
+import bitcamp.myapp.command.PlaySinglePlayerGameCommand;
 import bitcamp.myapp.listener.InitApplicationListener;
 import bitcamp.util.Prompt;
 
@@ -34,11 +36,9 @@ public class ClientApp {
   }
 
   void execute() {
-
     try {
-      String host = Prompt.input("서버 주소? ");
-      int port = Prompt.inputInt("포트 번호? ");
-
+      String host = Prompt.input("서버 주소?");
+      int port = Prompt.inputInt("포트 번호?");
       Socket socket = new Socket(host, port);
 
       ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
@@ -85,5 +85,4 @@ public class ClientApp {
         System.out.println("리스너 실행 중 오류 발생!");
       }
     }
-  }
-}
+  }}
