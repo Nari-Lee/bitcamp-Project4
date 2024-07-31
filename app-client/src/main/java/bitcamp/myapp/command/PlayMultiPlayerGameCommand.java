@@ -6,6 +6,7 @@ import bitcamp.util.Prompt;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 public class PlayMultiPlayerGameCommand implements Command {
   ApplicationContext appCtx;
@@ -16,13 +17,18 @@ public class PlayMultiPlayerGameCommand implements Command {
 
   @Override
   public void execute(String title) {
-    try {
-      ObjectInputStream in = (ObjectInputStream) appCtx.getAttribute("inputStream");
-      ObjectOutputStream out = (ObjectOutputStream) appCtx.getAttribute("outputStream");
+    ObjectInputStream in = null;
+    ObjectOutputStream out = null;
+    Socket socket = null;
 
-      if (in == null || out == null) {
-        throw new IllegalStateException("입출력 스트림이 초기화되지 않았습니다.");
-      }
+    try {
+      String host = Prompt.input("서버 주소? ");
+      int port = Prompt.inputInt("포트 번호? ");
+
+      socket = new Socket(host, port);
+
+      out = new ObjectOutputStream(socket.getOutputStream());
+      in = new ObjectInputStream(socket.getInputStream());
 
       System.out.println("멀티플레이어 게임을 시작합니다. 다른 플레이어를 기다리고 있습니다...");
 
@@ -41,8 +47,22 @@ public class PlayMultiPlayerGameCommand implements Command {
           break;
         }
       }
+
     } catch (Exception e) {
+      System.out.println("오류 발생: " + e.getMessage());
       e.printStackTrace();
+    } finally {
+      try {
+        if (out != null) {
+          out.writeUTF("quit");
+          out.flush();
+        }
+        if (in != null) in.close();
+        if (out != null) out.close();
+        if (socket != null) socket.close();
+      } catch (Exception e) {
+        System.out.println("연결 종료 중 오류 발생: " + e.getMessage());
+      }
     }
   }
 }

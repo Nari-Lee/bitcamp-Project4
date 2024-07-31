@@ -37,16 +37,6 @@ public class ClientApp {
 
   void execute() {
     try {
-      String host = Prompt.input("서버 주소? ");
-      int port = Prompt.inputInt("포트 번호? ");
-      Socket socket = new Socket(host, port);
-
-      ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-      ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-
-      appCtx.setAttribute("inputStream", in);
-      appCtx.setAttribute("outputStream", out);
-
       // 애플리케이션이 시작될 때 리스너에게 알린다.
       for (ApplicationListener listener : listeners) {
         try {
@@ -64,9 +54,6 @@ public class ClientApp {
       } else {
         System.out.println("메인 메뉴를 초기화하지 못했습니다.");
       }
-
-      out.writeUTF("quit");
-      out.flush();
 
     } catch (Exception ex) {
       System.out.println("실행 오류!");
