@@ -37,13 +37,13 @@ public class ClientApp {
 
   void execute() {
     try {
-      String host = Prompt.input("서버 주소?");
-      int port = Prompt.inputInt("포트 번호?");
+      String host = Prompt.input("서버 주소? ");
+      int port = Prompt.inputInt("포트 번호? ");
+
       Socket socket = new Socket(host, port);
 
       ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
       ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-
       appCtx.setAttribute("inputStream", in);
       appCtx.setAttribute("outputStream", out);
 
@@ -85,4 +85,5 @@ public class ClientApp {
         System.out.println("리스너 실행 중 오류 발생!");
       }
     }
-  }}
+  }
+}

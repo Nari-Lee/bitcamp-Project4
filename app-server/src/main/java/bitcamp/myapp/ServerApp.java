@@ -48,6 +48,7 @@ public class ServerApp {
         new Thread(clientHandler).start();
       }
 
+      // 모든 클라이언트가 접속한 후 게임을 시작
       startGame();
 
     } catch (Exception e) {
@@ -81,7 +82,6 @@ public class ServerApp {
       return;
     }
 
-    currentNumber += count;
     for (int i = 1; i <= count; i++) {
       currentNumber++;
       clients.get(currentPlayer).sendMessage(String.valueOf(currentNumber));
