@@ -68,7 +68,7 @@ public class ServerApp {
       clients.get(1 - currentPlayer).sendMessage("당신이 이겼습니다!");
       return;
     }
-    clients.get(currentPlayer).sendMessage("현재 숫자: " + currentNumber + ". 숫자를 입력하세요 (1-3):");
+    clients.get(currentPlayer).sendMessage("현재 숫자: " + currentNumber);
   }
 
   synchronized void handlePlayerInput(int playerNumber, int count) {
