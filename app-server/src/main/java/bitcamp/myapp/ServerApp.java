@@ -46,10 +46,10 @@ public class ServerApp {
         ClientHandler clientHandler = new ClientHandler(clientSocket, this, clients.size() + 1);
         clients.add(clientHandler);
         new Thread(clientHandler).start();
-        if (clients.size() == 2) {
-          startGame();
-        }
       }
+
+      startGame();
+
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -106,14 +106,17 @@ public class ServerApp {
       this.socket = socket;
       this.server = server;
       this.playerNumber = playerNumber;
+      try {
+        out = new ObjectOutputStream(socket.getOutputStream());
+        in = new ObjectInputStream(socket.getInputStream());
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
 
     @Override
     public void run() {
       try {
-        in = new ObjectInputStream(socket.getInputStream());
-        out = new ObjectOutputStream(socket.getOutputStream());
-
         while (true) {
           String message = in.readUTF();
           try {
@@ -142,6 +145,15 @@ public class ServerApp {
         out.flush();
       } catch (IOException e) {
         e.printStackTrace();
+      }
+    }
+
+    public String receiveMessage() {
+      try {
+        return in.readUTF();
+      } catch (IOException e) {
+        e.printStackTrace();
+        return null;
       }
     }
   }
