@@ -39,11 +39,11 @@ public class ClientApp {
     try {
       String host = Prompt.input("서버 주소? ");
       int port = Prompt.inputInt("포트 번호? ");
-
       Socket socket = new Socket(host, port);
 
       ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
       ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+
       appCtx.setAttribute("inputStream", in);
       appCtx.setAttribute("outputStream", out);
 

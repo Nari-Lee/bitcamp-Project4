@@ -82,10 +82,15 @@ public class ServerApp {
       return;
     }
 
+    StringBuilder numbers = new StringBuilder();
     for (int i = 1; i <= count; i++) {
       currentNumber++;
-      clients.get(currentPlayer).sendMessage(String.valueOf(currentNumber));
+      numbers.append(currentNumber).append(" ");
     }
+
+    clients.get(currentPlayer).sendMessage(numbers.toString().trim());
+    clients.get(1 - currentPlayer).sendMessage(numbers.toString().trim());
+
     if (currentNumber >= 31) {
       clients.get(currentPlayer).sendMessage("당신이 졌습니다!");
       clients.get(1 - currentPlayer).sendMessage("당신이 이겼습니다!");
