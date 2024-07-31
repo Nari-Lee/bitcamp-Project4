@@ -15,7 +15,7 @@ public class InitApplicationListener implements ApplicationListener {
     MenuGroup mainMenu = new MenuGroup("메인 메뉴");
 
     mainMenu.add(new MenuItem("혼자하기", new PlaySinglePlayerGameCommand(ctx)));
-    mainMenu.add(new MenuItem("멀티게임", new PlayMultiPlayerGameCommand())); // 멀티게임은 구현되지 않았음
+    mainMenu.add(new MenuItem("멀티게임", new PlayMultiPlayerGameCommand(ctx)));
     mainMenu.add(new MenuItem("도움말", new HelpCommand()));
 
     mainMenu.setExitMenuTitle("종료");

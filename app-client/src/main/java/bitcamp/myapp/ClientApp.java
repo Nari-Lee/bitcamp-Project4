@@ -3,8 +3,6 @@ package bitcamp.myapp;
 import bitcamp.context.ApplicationContext;
 import bitcamp.listener.ApplicationListener;
 import bitcamp.menu.MenuGroup;
-import bitcamp.myapp.command.PlaySinglePlayerGameCommand;
-import bitcamp.myapp.command.PlayMultiPlayerGameCommand;
 import bitcamp.myapp.listener.InitApplicationListener;
 import bitcamp.util.Prompt;
 
