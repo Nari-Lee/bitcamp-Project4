@@ -22,6 +22,7 @@ public class PlayMultiPlayerGameCommand implements Command {
     Socket socket = null;
 
     try {
+      // 서버에게 주소와 포트 번호를 입력받아서 소켓을 생성
       String host = Prompt.input("서버 주소? ");
       int port = Prompt.inputInt("포트 번호? ");
 
@@ -33,8 +34,10 @@ public class PlayMultiPlayerGameCommand implements Command {
       System.out.println("멀티플레이어 게임을 시작합니다. 다른 플레이어를 기다리고 있습니다...");
 
       while (true) {
+        // 서버로부터 숫자를 입력 받고 출력
         String message = in.readUTF();
         System.out.println(message);
+        // 숫자를 입력 받아 서버로 전송
         if (message.contains("현재 숫자: ")) {
           int count = Prompt.inputInt("몇 개의 숫자를 말하시겠습니까? (1-3)>");
           while (count < 1 || count > 3) {
@@ -45,6 +48,7 @@ public class PlayMultiPlayerGameCommand implements Command {
         }
         if (message.contains("졌습니다") || message.contains("이겼습니다")) {
           break;
+          // 게임 종료
         }
       }
 
@@ -52,6 +56,7 @@ public class PlayMultiPlayerGameCommand implements Command {
       System.out.println("오류 발생: " + e.getMessage());
       e.printStackTrace();
     } finally {
+      // 연결 종료 메세지를 서버에 전송하고 스트림과 소켓을 닫음
       try {
         if (out != null) {
           out.writeUTF("quit");

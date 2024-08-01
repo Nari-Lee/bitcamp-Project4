@@ -13,10 +13,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServerApp {
+  // 애플리케이션의 상태 변화를 알리기 위한 리스너 객체들을 저장하는 리스트
   List<ApplicationListener> listeners = new ArrayList<>();
+  // 애플리케이션의 상태 전체를 관리하는 애플리케이션 컨텍스트 객체를 생성
   ApplicationContext appCtx = new ApplicationContext();
+  // 연결된 클라이언트 핸들러를 리스트에 저장
   List<ClientHandler> clients = new ArrayList<>();
+
+  // 현재 턴인 플레이어 (0 또는 1을 가짐)
   int currentPlayer = 0;
+
+  // 현재 숫자
   int currentNumber = 0;
 
   public static void main(String[] args) {
@@ -25,10 +32,12 @@ public class ServerApp {
     app.execute();
   }
 
+  // 애플리케이션 리스너를 리스트에 추가하는 메서드
   private void addApplicationListener(ApplicationListener listener) {
     listeners.add(listener);
   }
 
+  // 애플리케이션 리스너를 리스트에서 제거하는 메서드
   private void removeApplicationListener(ApplicationListener listener) {
     listeners.remove(listener);
   }
@@ -41,6 +50,7 @@ public class ServerApp {
         listener.onStart(appCtx);
       }
 
+      //두 명의 클러이언트가 연결될 떄까지 대기
       while (clients.size() < 2) {
         Socket clientSocket = serverSocket.accept();
         ClientHandler clientHandler = new ClientHandler(clientSocket, this, clients.size() + 1);
@@ -56,22 +66,31 @@ public class ServerApp {
     }
   }
 
+  // 게임을 시작할때 메세지를 각 클라이언트에게 전송
   synchronized void startGame() {
     clients.get(0).sendMessage("게임이 시작되었습니다. 당신은 플레이어 1입니다.");
     clients.get(1).sendMessage("게임이 시작되었습니다. 당신은 플레이어 2입니다.");
+    // 플레이어1에게 턴 메시지 전송
     sendNextTurnMessage();
   }
 
   synchronized void sendNextTurnMessage() {
+    // 숫자가 31보다 큰지 확인하고 31이상이면 게임 종료 판단
     if (currentNumber >= 31) {
+
+      // 게임이 종료되면 승패 결과를 각 클라이언트에게 전송
       clients.get(currentPlayer).sendMessage("당신이 졌습니다!");
       clients.get(1 - currentPlayer).sendMessage("당신이 이겼습니다!");
       return;
     }
+
+    // 현재 숫자와 입력 받을 메시지를 현재 턴인 클라이언트에게 전송
     clients.get(currentPlayer).sendMessage("현재 숫자: " + currentNumber);
   }
 
+  // 현재 턴인 플레이어가 입력한 숫자를 처리하는 메서드
   synchronized void handlePlayerInput(int playerNumber, int count) {
+    // 입력된 숫자가 유효하지 않으면 오류 메시지 전송
     if (playerNumber != currentPlayer + 1) {
       clients.get(playerNumber - 1).sendMessage("지금은 당신의 차례가 아닙니다!");
       return;
@@ -82,6 +101,7 @@ public class ServerApp {
       return;
     }
 
+    // 입력받은 숫자만큼 현재 숫자를 증가시키고 각 클라이언트에게 보냄
     StringBuilder numbers = new StringBuilder();
     for (int i = 1; i <= count; i++) {
       currentNumber++;
@@ -92,6 +112,7 @@ public class ServerApp {
     clients.get(1 - currentPlayer).sendMessage(numbers.toString().trim());
 
     if (currentNumber >= 31) {
+      // 각 클라이언트에게 게임 종료시 승패를 전송
       clients.get(currentPlayer).sendMessage("당신이 졌습니다!");
       clients.get(1 - currentPlayer).sendMessage("당신이 이겼습니다!");
     } else {
@@ -100,11 +121,13 @@ public class ServerApp {
     }
   }
 
+  // 각 클라이언트와의 통신을 처리하는 클래스
   class ClientHandler implements Runnable {
     private Socket socket;
     private ServerApp server;
     private ObjectInputStream in;
     private ObjectOutputStream out;
+    // 플레이어 번호
     private int playerNumber;
 
     public ClientHandler(Socket socket, ServerApp server, int playerNumber) {
@@ -123,6 +146,7 @@ public class ServerApp {
     public void run() {
       try {
         while (true) {
+          // 클라이언트로부터 숫자를 입력받고 읽고 처리
           String message = in.readUTF();
           try {
             int count = Integer.parseInt(message);
