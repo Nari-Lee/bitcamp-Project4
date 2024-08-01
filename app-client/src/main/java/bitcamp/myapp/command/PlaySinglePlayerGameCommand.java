@@ -17,12 +17,14 @@ public class PlaySinglePlayerGameCommand implements Command {
     @Override
     public void execute(String title) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("모드를 선택하세요: ");
+        System.out.println("모드를 선택하세요! ");
         System.out.println("1. 중복된 숫자 허용");
         System.out.println("2. 중복된 숫자 금지");
         int mode = Prompt.inputInt("모드 선택 (1 또는 2): ");
+        System.out.println();
 
         if (mode == 1) {
+            System.out.println("중복된 숫자는 입력할 수 없는 배스킨라빈스 게임입니다!\n예) 플레이어 : 2\n    컴퓨터   : 2\n");
             playAllowDuplicateMode();
         } else if (mode == 2) {
             playNoDuplicateMode();
