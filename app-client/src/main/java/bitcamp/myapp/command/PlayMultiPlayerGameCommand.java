@@ -28,8 +28,13 @@ public class PlayMultiPlayerGameCommand implements Command {
 
       socket = new Socket(host, port);
 
+      String nickname = Prompt.input("닉네임을 입력하세요 : ");
+
       out = new ObjectOutputStream(socket.getOutputStream());
       in = new ObjectInputStream(socket.getInputStream());
+
+      out.writeUTF(nickname);
+      out.flush();
 
       System.out.println("멀티플레이어 게임을 시작합니다. 다른 플레이어를 기다리고 있습니다...");
 
@@ -39,7 +44,7 @@ public class PlayMultiPlayerGameCommand implements Command {
         System.out.println(message);
         // 숫자를 입력 받아 서버로 전송
         if (message.contains("현재 숫자: ")) {
-          int count = Prompt.inputInt("몇 개의 숫자를 말하시겠습니까? (1-3)>");
+          int count = Prompt.inputInt(nickname + "님 몇 개의 숫자를 말하시겠습니까? (1-3)>");
           while (count < 1 || count > 3) {
             count = Prompt.inputInt("잘못된 입력입니다. 다시 입력해주세요 (1-3)>");
           }

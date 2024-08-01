@@ -2,70 +2,63 @@ package bitcamp.myapp.command;
 
 import bitcamp.command.Command;
 import bitcamp.context.ApplicationContext;
-import bitcamp.myapp.dao.stub.Stub;
 import bitcamp.util.Prompt;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.util.Random;
+import java.util.Scanner;
 
 public class PlaySinglePlayerGameCommand implements Command {
-  ApplicationContext appCtx;
+    ApplicationContext appCtx;
 
-  public PlaySinglePlayerGameCommand(ApplicationContext appCtx) {
-    this.appCtx = appCtx;
-  }
+    public PlaySinglePlayerGameCommand(ApplicationContext appCtx) {
+        this.appCtx = appCtx;
+    }
 
-  @Override
-  public void execute(String title) {
-    try {
-      ObjectInputStream in = (ObjectInputStream) appCtx.getAttribute("inputStream");
-      ObjectOutputStream out = (ObjectOutputStream) appCtx.getAttribute("outputStream");
+    @Override
+    public void execute(String title) {
 
-      if (in == null || out == null) {
-        throw new IllegalStateException("입출력 스트림이 초기화되지 않았습니다.");
-      }
+        Random random = new Random();
+        Scanner scanner = new Scanner(System.in);
 
-      Stub stub = new Stub(out, in);
-      int currentNumber = 0;
-      boolean isPlayerTurn = true;
+        int currentNumber = 0;
+        boolean isPlayerTurn = true;
 
-      while (currentNumber < 31) {
-        if (isPlayerTurn) {
-          System.out.println("현재 숫자: " + currentNumber);
-          int count = Prompt.inputInt("플레이어, 몇 개의 숫자를 말하시겠습니까? (1-3)>");
-          while (count < 1 || count > 3) {
-            count = Prompt.inputInt("잘못된 입력입니다. 다시 입력해주세요 (1-3)>");
-          }
-          printNumbers(currentNumber + 1, currentNumber + count);
-          String result = stub.playerTurn(currentNumber, count);
-          String[] parts = result.split(" 현재 숫자: ");
-          currentNumber = Integer.parseInt(parts[1].trim());
-          if (parts[0].contains("플레이어가 졌습니다.")) {
-            System.out.println(parts[0].trim());
-            break;
-          }
-        } else {
-          String result = stub.computerTurn(currentNumber);
-          String[] parts = result.split(" 현재 숫자: ");
-          int oldCurrentNumber = currentNumber;
-          currentNumber = Integer.parseInt(parts[1].trim());
-          System.out.println(parts[0].trim());
-          printNumbers(oldCurrentNumber + 1, currentNumber);
-          if (parts[0].contains("컴퓨터가 졌습니다.")) {
-            break;
-          }
+        System.out.println("게임을 시작하려면 아무키나 누르세요 ! (0은 종료)");
+        String abc = scanner.nextLine();
+        if (abc.equalsIgnoreCase("0")) {
+            return;
         }
-        isPlayerTurn = !isPlayerTurn;
-      }
 
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
+        while (currentNumber < 31) {
+            // 플레이어 턴
+            isPlayerTurn = true;
+            System.out.println("플레이어 턴 현재 숫자: " + currentNumber);
+            int count = Prompt.inputInt("플레이어, 몇 개의 숫자를 말하시겠습니까? (1-3)>");
+            while (count < 1 || count > 3) {
+                count = Prompt.inputInt("잘못된 입력입니다. 다시 입력해주세요 (1-3)>");
+            }
+            for (int i = 0; i < count; i++) {
+                currentNumber += 1;
+                System.out.print(currentNumber + " ");
+            }
+            System.out.println();
+            if (currentNumber >= 31) break;
 
-  private void printNumbers(int start, int end) {
-    for (int i = start; i <= end; i++) {
-      System.out.println(i);
+            // 컴퓨터 턴
+            isPlayerTurn = !isPlayerTurn;
+            System.out.println("컴퓨터 턴 현재 숫자 : " + currentNumber);
+            int randomNumber = random.nextInt(3) + 1;
+            System.out.printf("컴퓨터가 %d개를 입력했습니다.\n", randomNumber);
+            for (int i = 0; i < randomNumber; i++) {
+                currentNumber += 1;
+                System.out.print(currentNumber + " ");
+            }
+            System.out.println();
+        }
+        if (isPlayerTurn) {
+            System.out.println("플레이어가 졌습니다 ... 컴퓨터가 이겼습니다.");
+        } else {
+            System.out.println("플레이어가 이겼습니다!!!!!");
+        }
     }
-  }
 }
