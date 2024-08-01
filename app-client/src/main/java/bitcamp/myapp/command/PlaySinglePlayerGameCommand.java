@@ -2,12 +2,9 @@ package bitcamp.myapp.command;
 
 import bitcamp.command.Command;
 import bitcamp.context.ApplicationContext;
-import bitcamp.myapp.dao.stub.Stub;
 import bitcamp.util.Prompt;
 
 import java.util.Random;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
 public class PlaySinglePlayerGameCommand implements Command {
