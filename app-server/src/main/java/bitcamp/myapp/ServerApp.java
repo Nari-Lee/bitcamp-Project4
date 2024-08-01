@@ -60,13 +60,11 @@ public class ServerApp {
                 clients.add(clientHandler);
                 new Thread(clientHandler).start();
             }
-
-            // 모든 클라이언트가 접속한 후 게임을 시작
-            startGame();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+        // 모든 클라이언트가 접속한 후 게임을 시작
+        startGame();
     }
 
     // 게임을 시작할때 메세지를 각 클라이언트에게 전송
@@ -149,6 +147,7 @@ public class ServerApp {
         public void run() {
             try {
                 this.nickname = in.readUTF();
+                //Thread.sleep(1000);
                 while (true) {
                     // 클라이언트로부터 숫자를 입력받고 읽고 처리
                     String message = in.readUTF();

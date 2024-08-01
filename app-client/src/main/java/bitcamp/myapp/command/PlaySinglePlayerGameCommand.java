@@ -48,6 +48,7 @@ public class PlaySinglePlayerGameCommand implements Command {
             isPlayerTurn = !isPlayerTurn;
             System.out.println("컴퓨터 턴 현재 숫자 : " + currentNumber);
             int randomNumber = random.nextInt(3) + 1;
+            System.out.printf("컴퓨터가 %d개를 입력했습니다.\n", randomNumber);
             for (int i = 0; i < randomNumber; i++) {
                 currentNumber += 1;
                 System.out.print(currentNumber + " ");
