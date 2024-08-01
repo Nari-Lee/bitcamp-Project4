@@ -3,6 +3,7 @@ package bitcamp.myapp;
 import bitcamp.context.ApplicationContext;
 import bitcamp.listener.ApplicationListener;
 import bitcamp.myapp.listener.InitApplicationListener;
+import bitcamp.util.Prompt;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -25,6 +26,8 @@ public class ServerApp {
 
   // 현재 숫자
   int currentNumber = 0;
+
+  String nickname;
 
   public static void main(String[] args) {
     ServerApp app = new ServerApp();
@@ -68,9 +71,8 @@ public class ServerApp {
 
   // 게임을 시작할때 메세지를 각 클라이언트에게 전송
   synchronized void startGame() {
-    clients.get(0).sendMessage("게임이 시작되었습니다. 당신은 플레이어 1입니다.");
-    clients.get(1).sendMessage("게임이 시작되었습니다. 당신은 플레이어 2입니다.");
-    // 플레이어1에게 턴 메시지 전송
+    clients.get(0).sendMessage("게임이 시작되었습니다. 닉네임은 " + clients.get(0).nickname + " 입니다.");
+    clients.get(1).sendMessage("게임이 시작되었습니다. 닉네임은 " + clients.get(1).nickname + " 입니다.");
     sendNextTurnMessage();
   }
 
@@ -79,13 +81,13 @@ public class ServerApp {
     if (currentNumber >= 31) {
 
       // 게임이 종료되면 승패 결과를 각 클라이언트에게 전송
-      clients.get(currentPlayer).sendMessage("당신이 졌습니다!");
-      clients.get(1 - currentPlayer).sendMessage("당신이 이겼습니다!");
+      clients.get(currentPlayer).sendMessage(clients.get(currentPlayer).nickname + " 님이 졌습니다!");
+      clients.get(1 - currentPlayer).sendMessage(clients.get(1 - currentPlayer).nickname + " 님이 이겼습니다!");
       return;
     }
 
     // 현재 숫자와 입력 받을 메시지를 현재 턴인 클라이언트에게 전송
-    clients.get(currentPlayer).sendMessage("현재 숫자: " + currentNumber);
+    clients.get(currentPlayer).sendMessage(clients.get(currentPlayer).nickname + "님 턴, 현재 숫자: " + currentNumber);
   }
 
   // 현재 턴인 플레이어가 입력한 숫자를 처리하는 메서드
@@ -123,6 +125,7 @@ public class ServerApp {
 
   // 각 클라이언트와의 통신을 처리하는 클래스
   class ClientHandler implements Runnable {
+    public String nickname;
     private Socket socket;
     private ServerApp server;
     private ObjectInputStream in;
@@ -145,6 +148,7 @@ public class ServerApp {
     @Override
     public void run() {
       try {
+        this.nickname = in.readUTF();
         while (true) {
           // 클라이언트로부터 숫자를 입력받고 읽고 처리
           String message = in.readUTF();
