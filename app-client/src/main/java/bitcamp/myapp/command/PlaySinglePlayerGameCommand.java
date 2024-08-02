@@ -24,7 +24,7 @@ public class PlaySinglePlayerGameCommand implements Command {
         System.out.println();
 
         if (mode == 1) {
-            System.out.println("중복된 숫자는 입력할 수 없는 배스킨라빈스 게임입니다!\n예) 플레이어 : 2\n    컴퓨터   : 2\n");
+            System.out.println("중복된 숫자는 입력할 수 없는 배스킨라빈스 게임입니다!\n직전 컴퓨터 턴에 컴퓨터가 입력한 개수는 입력할 수 없습니다.\n 예) 플레이어 : 2\n     컴퓨터   : 2\n");
             playAllowDuplicateMode();
         } else if (mode == 2) {
             playNoDuplicateMode();
