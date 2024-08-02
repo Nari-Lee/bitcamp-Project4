@@ -1,5 +1,6 @@
 package bitcamp.myapp.command;
 
+import bitcamp.command.AnsiColors;
 import bitcamp.command.Command;
 import bitcamp.context.ApplicationContext;
 import bitcamp.util.Prompt;
@@ -36,7 +37,7 @@ public class PlayMultiPlayerGameCommand implements Command {
       out.writeUTF(nickname);
       out.flush();
 
-      System.out.println("멀티플레이어 게임을 시작합니다. 다른 플레이어를 기다리고 있습니다...");
+      System.out.println(AnsiColors.YELLOW + "멀티플레이어 게임을 시작합니다. 다른 플레이어를 기다리고 있습니다..." + AnsiColors.RESET);
 
       while (true) {
         // 서버로부터 숫자를 입력 받고 출력
@@ -58,7 +59,7 @@ public class PlayMultiPlayerGameCommand implements Command {
       }
 
     } catch (Exception e) {
-      System.out.println("오류 발생: " + e.getMessage());
+      System.out.println(AnsiColors.RED + "오류 발생: " + e.getMessage() + AnsiColors.RESET);
       e.printStackTrace();
     } finally {
       // 연결 종료 메세지를 서버에 전송하고 스트림과 소켓을 닫음
@@ -71,7 +72,7 @@ public class PlayMultiPlayerGameCommand implements Command {
         if (out != null) out.close();
         if (socket != null) socket.close();
       } catch (Exception e) {
-        System.out.println("연결 종료 중 오류 발생: " + e.getMessage());
+        System.out.println(AnsiColors.RED + "연결 종료 중 오류 발생: " + e.getMessage() + AnsiColors.RESET);
       }
     }
   }

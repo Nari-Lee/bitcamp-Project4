@@ -1,5 +1,6 @@
 package bitcamp.myapp;
 
+import bitcamp.command.AnsiColors;
 import bitcamp.context.ApplicationContext;
 import bitcamp.listener.ApplicationListener;
 import bitcamp.menu.MenuGroup;
@@ -40,26 +41,26 @@ public class ClientApp {
         try {
           listener.onStart(appCtx);
         } catch (Exception e) {
-          System.out.println("리스너 실행 중 오류 발생!");
+          System.out.println(AnsiColors.RED + "리스너 실행 중 오류 발생!" + AnsiColors.RESET);
         }
       }
 
-      System.out.println("[베스킨라빈스31 게임]");
+     printBanner();
 
       // 메인 메뉴를 가져와 실행
       MenuGroup mainMenu = (MenuGroup) appCtx.getAttribute("mainMenu");
       if (mainMenu != null) {
         mainMenu.execute();
       } else {
-        System.out.println("메인 메뉴를 초기화하지 못했습니다.");
+        System.out.println(AnsiColors.RED + "메인 메뉴를 초기화하지 못했습니다." + AnsiColors.RESET);
       }
 
     } catch (Exception ex) {
-      System.out.println("실행 오류!");
+      System.out.println(AnsiColors.RED + "실행 오류!" + AnsiColors.RESET);
       ex.printStackTrace();
     }
 
-    System.out.println("종료합니다.");
+    System.out.println(AnsiColors.GREEN + "종료합니다." + AnsiColors.RESET);
 
     // 프롬프트 종료
     Prompt.close();
@@ -69,8 +70,15 @@ public class ClientApp {
       try {
         listener.onShutdown(appCtx);
       } catch (Exception e) {
-        System.out.println("리스너 실행 중 오류 발생!");
+        System.out.println(AnsiColors.RED + "리스너 실행 중 오류 발생!" + AnsiColors.RESET);
       }
     }
+  }
+  private void printBanner() {
+    String banner = AnsiColors.CYAN +
+        "==========================================\n" +
+        "              베스킨라빈스31 게임          \n" +
+        "==========================================\n" + AnsiColors.RESET;
+    System.out.print(banner);
   }
 }

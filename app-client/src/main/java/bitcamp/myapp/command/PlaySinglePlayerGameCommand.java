@@ -1,5 +1,6 @@
 package bitcamp.myapp.command;
 
+import bitcamp.command.AnsiColors;
 import bitcamp.command.Command;
 import bitcamp.context.ApplicationContext;
 import bitcamp.util.Prompt;
@@ -17,14 +18,14 @@ public class PlaySinglePlayerGameCommand implements Command {
     @Override
     public void execute(String title) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("모드를 선택하세요! ");
+        System.out.println(AnsiColors.BLUE + "모드를 선택하세요!" + AnsiColors.RESET);
         System.out.println("1. 중복된 숫자 허용");
         System.out.println("2. 중복된 숫자 금지");
         int mode = Prompt.inputInt("모드 선택 (1 또는 2): ");
         System.out.println();
 
         if (mode == 1) {
-            System.out.println("중복된 숫자는 입력할 수 없는 배스킨라빈스 게임입니다!\n직전 컴퓨터 턴에 컴퓨터가 입력한 개수는 입력할 수 없습니다.\n 예) 플레이어 : 2\n     컴퓨터   : 2\n");
+            System.out.println(AnsiColors.BLUE + "중복된 숫자는 입력할 수 없는 배스킨라빈스 게임입니다!\n예) 플레이어 : 2\n    컴퓨터   : 2\n" + AnsiColors.RESET);
             playAllowDuplicateMode();
         } else if (mode == 2) {
             playNoDuplicateMode();
@@ -49,7 +50,7 @@ public class PlaySinglePlayerGameCommand implements Command {
         while (currentNumber < 31) {
             // 플레이어 턴
             isPlayerTurn = true;
-            System.out.println("플레이어 턴 현재 숫자: " + currentNumber);
+            System.out.println(AnsiColors.CYAN + "플레이어 턴 현재 숫자: " + currentNumber + AnsiColors.RESET);
             int count = Prompt.inputInt("플레이어, 몇 개의 숫자를 말하시겠습니까? (1-3)>");
             while (count < 1 || count > 3) {
                 count = Prompt.inputInt("잘못된 입력입니다. 다시 입력해주세요 (1-3)>");
@@ -63,7 +64,7 @@ public class PlaySinglePlayerGameCommand implements Command {
 
             // 컴퓨터 턴
             isPlayerTurn = !isPlayerTurn;
-            System.out.println("컴퓨터 턴 현재 숫자 : " + currentNumber);
+            System.out.println(AnsiColors.CYAN + "컴퓨터 턴 현재 숫자 : " + currentNumber + AnsiColors.RESET);
             int randomNumber = random.nextInt(3) + 1;
             System.out.printf("컴퓨터가 %d개를 입력했습니다.\n", randomNumber);
             for (int i = 0; i < randomNumber; i++) {
@@ -73,9 +74,9 @@ public class PlaySinglePlayerGameCommand implements Command {
             System.out.println();
         }
         if (isPlayerTurn) {
-            System.out.println("플레이어가 졌습니다 ... 컴퓨터가 이겼습니다.");
+            System.out.println(AnsiColors.RED + "플레이어가 졌습니다 ... 컴퓨터가 이겼습니다." + AnsiColors.RESET);
         } else {
-            System.out.println("플레이어가 이겼습니다!!!!!");
+            System.out.println(AnsiColors.GREEN + "플레이어가 이겼습니다!!!!!" + AnsiColors.RESET);
         }
     }
 
@@ -87,17 +88,17 @@ public class PlaySinglePlayerGameCommand implements Command {
         int lastPlayerCount = 0;
         boolean isPlayerTurn = true;
 
-        System.out.println("게임을 시작하려면 아무키나 누르세요! (0은 종료)");
+        System.out.println(AnsiColors.GREEN + "게임을 시작하려면 아무키나 누르세요! (0은 종료)" + AnsiColors.RESET);
         String abc = scanner.nextLine();
         if (abc.equalsIgnoreCase("0")) {
             return;
         }
-        System.out.println("중복된 숫자는 입력할 수 없는 베스킨라빈스31입니다!");
+        System.out.println(AnsiColors.GREEN + "중복된 숫자는 입력할 수 없는 베스킨라빈스31입니다!" + AnsiColors.RESET);
 
         while (currentNumber < 31) {
             // 플레이어 턴
             isPlayerTurn = true;
-            System.out.println("플레이어 턴 현재 숫자: " + currentNumber);
+            System.out.println(AnsiColors.CYAN + "플레이어 턴 현재 숫자: " + currentNumber + AnsiColors.RESET);
             int playerCount;
             while (true) {
                 playerCount = Prompt.inputInt("플레이어, 몇 개의 숫자를 말하시겠습니까? (1-3)>");
@@ -107,7 +108,7 @@ public class PlaySinglePlayerGameCommand implements Command {
                 if (playerCount != lastPlayerCount) {
                     break;
                 }
-                System.out.println("중복된 숫자입니다. 다시 입력해주세요.");
+                System.out.println(AnsiColors.RED + "중복된 숫자입니다. 다시 입력해주세요." + AnsiColors.RESET);
             }
             for (int i = 0; i < playerCount; i++) {
                 currentNumber += 1;
@@ -119,7 +120,7 @@ public class PlaySinglePlayerGameCommand implements Command {
 
             // 컴퓨터 턴
             isPlayerTurn = !isPlayerTurn;
-            System.out.println("컴퓨터 턴 현재 숫자 : " + currentNumber);
+            System.out.println(AnsiColors.CYAN + "컴퓨터 턴 현재 숫자 : " + currentNumber + AnsiColors.RESET);
             int computerCount;
             while (true) {
                 computerCount = random.nextInt(3) + 1;
@@ -136,9 +137,9 @@ public class PlaySinglePlayerGameCommand implements Command {
             lastPlayerCount = computerCount;
         }
         if (isPlayerTurn) {
-            System.out.println("플레이어가 졌습니다... 컴퓨터가 이겼습니다.");
+            System.out.println(AnsiColors.RED + "플레이어가 졌습니다... 컴퓨터가 이겼습니다." + AnsiColors.RESET);
         } else {
-            System.out.println("플레이어가 이겼습니다!!!!!");
+            System.out.println(AnsiColors.GREEN + "플레이어가 이겼습니다!!!!!" + AnsiColors.RESET);
         }
     }
 }
