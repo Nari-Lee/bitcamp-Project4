@@ -1,8 +1,6 @@
 package bitcamp.menu;
 
-import bitcamp.command.AnsiColors;
 import bitcamp.util.Prompt;
-
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -18,11 +16,12 @@ public class MenuGroup extends AbstractMenu {
 
   @Override
   public void execute() {
+
     String menuPath = getMenuPath();
 
     while (true) {
       printMenus();
-      String command = Prompt.input("%s> ", menuPath);
+      String command = Prompt.input("%s>", menuPath);
       if (command.equals("menu")) {
         printMenus();
         continue;
@@ -34,14 +33,14 @@ public class MenuGroup extends AbstractMenu {
         int menuNo = Integer.parseInt(command);
         Menu menu = getMenu(menuNo - 1);
         if (menu == null) {
-          System.out.println(AnsiColors.RED + "유효한 메뉴 번호가 아닙니다." + AnsiColors.RESET);
+          System.out.println("유효한 메뉴 번호가 아닙니다.");
           continue;
         }
 
         menu.execute();
 
       } catch (NumberFormatException ex) {
-        System.out.println(AnsiColors.RED + "숫자로 메뉴 번호를 입력하세요." + AnsiColors.RESET);
+        System.out.println("숫자로 메뉴 번호를 입력하세요.");
       }
     }
   }
@@ -61,22 +60,16 @@ public class MenuGroup extends AbstractMenu {
   }
 
   private void printMenus() {
-    StringBuilder menuBuilder = new StringBuilder();
-    menuBuilder.append(AnsiColors.YELLOW)
-        .append("==========================================\n")
-        .append(String.format("            [%s]\n", title))
-        .append("==========================================\n");
+    System.out.printf("[%s]\n", title);
     int i = 1;
     for (Menu menu : children) {
-      menuBuilder.append(String.format("  %d. %s\n", i++, menu.getTitle()));
+      System.out.printf("%d. %s\n", i++, menu.getTitle());
     }
-    menuBuilder.append(String.format("  0. %s\n", exitMenuTitle))
-        .append("==========================================\n")
-        .append(AnsiColors.RESET);
-    System.out.print(menuBuilder.toString());
+    System.out.printf("0. %s\n", exitMenuTitle);
   }
 
   private String getMenuPath() {
+    // 현재 메뉴그룹에서 상위 메뉴그룹으로 따라 올라가면서 메뉴이름을 스택에 담는다.
     Stack<String> menuPathStack = new Stack<>();
     MenuGroup menuGroup = this;
     while (menuGroup != null) {
@@ -84,6 +77,7 @@ public class MenuGroup extends AbstractMenu {
       menuGroup = menuGroup.parent;
     }
 
+    // 스택에 담겨 있는 메뉴이름을 꺼내서 메뉴 경로를 만든다.
     StringBuilder strBuilder = new StringBuilder();
     while (!menuPathStack.isEmpty()) {
       if (strBuilder.length() > 0) {
