@@ -1,12 +1,13 @@
 package bitcamp.myapp.listener;
 
+import bitcamp.command.Command;
 import bitcamp.context.ApplicationContext;
 import bitcamp.listener.ApplicationListener;
 import bitcamp.menu.MenuGroup;
 import bitcamp.menu.MenuItem;
 import bitcamp.myapp.command.HelpCommand;
-import bitcamp.myapp.command.PlayMultiPlayerGameCommand;
-import bitcamp.myapp.command.PlaySinglePlayerGameCommand;
+import bitcamp.myapp.command.PlayMultiGameCommand;
+import bitcamp.myapp.command.PlaySingleGameCommand;
 
 public class InitApplicationListener implements ApplicationListener {
 
@@ -14,8 +15,8 @@ public class InitApplicationListener implements ApplicationListener {
   public void onStart(ApplicationContext ctx) throws Exception {
     MenuGroup mainMenu = new MenuGroup("메인 메뉴");
 
-    mainMenu.add(new MenuItem("혼자하기", new PlaySinglePlayerGameCommand(ctx)));
-    mainMenu.add(new MenuItem("멀티게임", new PlayMultiPlayerGameCommand(ctx)));
+    mainMenu.add(new MenuItem("혼자하기", (Command) new PlaySingleGameCommand(ctx)));
+    mainMenu.add(new MenuItem("멀티게임", (Command) new PlayMultiGameCommand(ctx)));
     mainMenu.add(new MenuItem("도움말", new HelpCommand()));
 
     mainMenu.setExitMenuTitle("종료");

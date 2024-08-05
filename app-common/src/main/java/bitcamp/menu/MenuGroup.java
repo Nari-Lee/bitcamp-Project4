@@ -46,6 +46,16 @@ public class MenuGroup extends AbstractMenu {
     }
   }
 
+  public void executeCommand(String title) {
+    for (Menu menu : children) {
+      if (menu.getTitle().equals(title)) {
+        menu.execute();
+        return;
+      }
+    }
+    System.out.println(AnsiColors.RED + "유효한 메뉴 제목이 아닙니다." + AnsiColors.RESET);
+  }
+
   public void setExitMenuTitle(String title) {
     exitMenuTitle = title;
   }
